@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rejestracja Skoki">
+<meta name="theme-color" content="#0B3D8C">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230B3D8C' width='180' height='180'/><text x='50%' y='50%' font-size='100' dominant-baseline='middle' text-anchor='middle'>🪂</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230B3D8C' width='180' height='180'/><text x='50%' y='50%' font-size='100' dominant-baseline='middle' text-anchor='middle'>🪂</text></svg>">
+<title>Rejestracja – Skok Tandemowy</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --sky: #0B3D8C;
+    --sky-light: #1A5FBF;
+    --sky-pale: #EBF2FA;
+    --accent: #F97316;
+    --success: #16A34A;
+    --error: #DC2626;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #CBD5E1;
+    --white: #FFFFFF;
+    --radius: 14px;
+    --input-h: 58px;
+    --btn-h: 62px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(160deg, #0B3D8C 0%, #1A5FBF 45%, #C8DDF5 100%);
+    min-height: 100%;
+    min-height: -webkit-fill-available;
+    color: var(--text);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    background: rgba(5,25,65,0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 0 20px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  nav button {
+    background: none; border: none;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 16px; font-weight: 600;
+    padding: 0 24px;
+    height: 60px; min-width: 120px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  nav button.active { color: #fff; border-bottom-color: var(--accent); }
+
+  /* VIEWS */
+  .view { display: none; padding: 28px 20px 100px; max-width: 680px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 32px 16px 24px; color: white; }
+  .hero .plane { font-size: 52px; margin-bottom: 8px; }
+  .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+  .hero p  { font-size: 16px; opacity: .82; }
+
+  /* CARD */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 28px 22px;
+    box-shadow: 0 10px 50px rgba(0,0,0,.15);
+  }
+  .card h2 { font-size: 20px; font-weight: 700; color: var(--sky); margin-bottom: 4px; }
+  .card .sub { font-size: 14px; color: var(--muted); margin-bottom: 26px; }
+
+  /* FIELDS */
+  .field { margin-bottom: 22px; }
+  label {
+    display: block;
+    font-size: 14px; font-weight: 700; color: var(--text);
+    margin-bottom: 8px;
+  }
+  label em { color: var(--error); font-style: normal; margin-left: 2px; }
+
+  /* INPUT – Safari fix: explicit height + line-height instead of padding */
+  input {
+    display: block;
+    width: 100%;
+    height: var(--input-h);
+    line-height: var(--input-h);
+    padding: 0 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 17px;
+    color: var(--text);
+    background: #F8FAFC;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+  input:focus {
+    border-color: var(--sky-light);
+    box-shadow: 0 0 0 4px rgba(26,95,191,.12);
+    background: #fff;
+  }
+  input.err-field { border-color: var(--error); background: #FEF2F2; }
+  .err-msg { font-size: 13px; color: var(--error); font-weight: 600; margin-top: 6px; display: none; }
+  .err-msg.show { display: block; }
+
+  /* BUTTONS – Safari needs explicit type or it submits */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%;
+    height: var(--btn-h);
+    border: none; border-radius: var(--radius);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 18px; font-weight: 700;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: 10px;
+  }
+  .btn:active { opacity: .82; }
+  .btn-primary  { background: var(--accent); color: #fff; }
+  .btn-sm {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: auto; height: 48px; padding: 0 18px;
+    border: none; border-radius: 10px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; -webkit-appearance: none; appearance: none;
+  }
+  .btn-blue   { background: var(--sky-pale); color: var(--sky); }
+  .btn-green  { background: var(--success);  color: #fff; }
+  .btn-red    { background: #FEE2E2; color: var(--error); }
+  .btn-sync {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 58px; border: none; border-radius: 12px;
+    background: var(--success); color: #fff;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 17px; font-weight: 800;
+    cursor: pointer; -webkit-appearance: none; appearance: none;
+    margin-bottom: 14px;
+  }
+
+  /* SUCCESS */
+  .success-box { text-align: center; padding: 44px 16px; animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes pop { from { transform: scale(.75); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .success-box .check { font-size: 80px; margin-bottom: 14px; }
+  .success-box h2 { font-size: 26px; font-weight: 800; color: var(--success); margin-bottom: 10px; }
+  .success-box p  { color: var(--muted); font-size: 16px; margin-bottom: 28px; line-height: 1.6; }
+
+  /* SETUP BAR */
+  .setup-bar {
+    background: var(--sky-pale); border: 2px solid #93C5FD;
+    border-radius: 14px; padding: 16px; margin-bottom: 18px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .setup-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .setup-label { font-size: 13px; font-weight: 700; color: var(--sky); width: 130px; flex-shrink: 0; }
+  .setup-bar input { height: 46px; line-height: 46px; flex: 1; min-width: 150px; font-size: 14px; }
+
+  /* TOOLBAR */
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .toolbar input { height: 46px; line-height: 46px; flex: 1; min-width: 150px; font-size: 14px; border-radius: 10px; }
+  .badge { background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+
+  /* SYNC STATUS */
+  #sync-status { display:none; margin-bottom:14px; padding:13px 15px; border-radius:12px; font-size:14px; font-weight:600; line-height:1.5; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  table { width:100%; border-collapse:collapse; font-size:14px; min-width:520px; }
+  th { background:var(--sky); color:#fff; padding:12px 13px; text-align:left; font-weight:700; white-space:nowrap; }
+  td { padding:12px 13px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:nth-child(even) td { background:#F8FAFC; }
+
+  /* EMPTY */
+  .empty { text-align:center; padding:48px 20px; color:var(--muted); }
+  .empty .icon { font-size:48px; margin-bottom:10px; opacity:.4; }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1E293B; color: #fff;
+    padding: 13px 22px; border-radius: 12px;
+    font-size: 15px; font-weight: 600;
+    box-shadow: 0 4px 24px rgba(0,0,0,.3);
+    opacity: 0; transition: all .28s; z-index: 999;
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* PIN MODAL */
+  #pin-modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: none;
+    align-items: center; justify-content: center;
+  }
+  #pin-modal.open { display: flex; }
+  .pin-box {
+    background: #fff; border-radius: 24px;
+    padding: 40px 32px; width: 320px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  }
+  .pin-box .ico { font-size: 48px; margin-bottom: 12px; }
+  .pin-box h2 { font-size: 21px; font-weight: 800; color: var(--sky); margin-bottom: 6px; }
+  .pin-box p  { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  #pin-input {
+    width: 100%; height: 66px; line-height: 66px;
+    text-align: center; font-size: 30px; font-weight: 800;
+    letter-spacing: 10px; font-family: monospace;
+    border: 2px solid var(--border); border-radius: 14px;
+    background: #F8FAFC; outline: none;
+    -webkit-appearance: none; appearance: none;
+    margin-bottom: 8px;
+  }
+  #pin-input:focus { border-color: var(--sky-light); background: #fff; }
+  #pin-err { display:none; color:var(--error); font-size:14px; font-weight:700; margin-bottom:12px; }
+  .pin-btns { display:flex; gap:10px; margin-top:8px; }
+  .pin-btns button {
+    flex:1; height:52px; border-radius:12px; border:none;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size:16px; font-weight:700; cursor:pointer;
+    -webkit-appearance:none; appearance:none;
+  }
+  .pin-cancel { background:#F1F5F9; color:var(--muted); }
+  .pin-ok     { background:var(--sky); color:#fff; }
+</style>
+</head>
+<body>
+
+<nav>
+  <button type="button" class="active" onclick="switchView('form',this)">✍️ Formularz</button>
+  <button type="button" onclick="adminLogin(this)">🔒 Admin</button>
+</nav>
+
+<!-- FORMULARZ -->
+<div class="view active" id="view-form">
+  <div class="hero">
+    <div class="plane">🪂</div>
+    <h1>Rejestracja pasażera</h1>
+    <p>Wypełnij formularz przed skokiem</p>
+    <p style="font-size:14px;opacity:0.75;margin-top:8px">📧 Na podany adres e-mail zostanie wysłany link z filmem z Twojego skoku</p>
+  </div>
+
+  <div class="card" id="form-card">
+    <h2>Twoje dane</h2>
+    <p class="sub">Wszystkie pola są wymagane.</p>
+
+    <div class="field">
+      <label for="fname">Imię <em>*</em></label>
+      <input type="text" id="fname" placeholder="np. Anna"
+        autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false">
+      <div class="err-msg" id="err-fname">Podaj imię</div>
+    </div>
+
+    <div class="field">
+      <label for="lname">Nazwisko <em>*</em></label>
+      <input type="text" id="lname" placeholder="np. Kowalska"
+        autocomplete="family-name" autocorrect="off" autocapitalize="words" spellcheck="false">
+      <div class="err-msg" id="err-lname">Podaj nazwisko</div>
+    </div>
+
+    <div class="field">
+      <label for="email">Adres e-mail <em>*</em></label>
+      <input type="email" id="email" placeholder="np. anna@email.com"
+        autocomplete="email" autocorrect="off" autocapitalize="none"
+        spellcheck="false" inputmode="email">
+      <div class="err-msg" id="err-email">Podaj poprawny adres e-mail</div>
+    </div>
+
+    <div class="field">
+      <label for="phone">Numer telefonu <em>*</em></label>
+      <input type="tel" id="phone" placeholder="np. 601 234 567"
+        autocomplete="tel" inputmode="tel">
+      <div class="err-msg" id="err-phone">Podaj numer telefonu (min. 9 cyfr)</div>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="submitForm()">
+      🪂&nbsp; Zapisz i zatwierdź
+    </button>
+  </div>
+
+  <div class="card" id="success-card" style="display:none">
+    <div class="success-box">
+      <div class="check">✅</div>
+      <h2>Gotowe!</h2>
+      <p>Dane zapisane.<br>Miłego skoku! 🎉</p>
+      <button type="button" class="btn btn-primary" onclick="resetForm()">
+        ➕&nbsp; Kolejna osoba
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="view" id="view-admin">
+  <div class="hero">
+    <div class="plane">📋</div>
+    <h1>Panel administratora</h1>
+    <p>Pasażerowie i synchronizacja</p>
+  </div>
+
+  <div class="card">
+    <div class="setup-bar">
+      <div class="setup-row">
+        <span class="setup-label">🔗 URL skryptu:</span>
+        <input type="url" id="sheets-url" placeholder="https://script.google.com/macros/s/..."
+          autocorrect="off" autocapitalize="none" spellcheck="false">
+      </div>
+      <div class="setup-row">
+        <span class="setup-label">📄 Zakładka dziś:</span>
+        <input type="text" id="sheet-tab" placeholder="np. 10.06.2026"
+          autocorrect="off" spellcheck="false"
+          style="border-color:var(--accent);font-weight:700;font-size:16px">
+        <button type="button" class="btn-sm btn-blue" onclick="saveScriptUrl()">💾 Zapisz</button>
+      </div>
+    </div>
+
+    <button type="button" class="btn-sync" id="sync-btn" onclick="syncToSheets()">
+      ☁️&nbsp; Wyślij do Google Sheets
+    </button>
+
+    <div id="sync-status"></div>
+
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="🔍 Szukaj..."
+        oninput="renderTable()" autocorrect="off" spellcheck="false">
+      <span class="badge" id="count-badge">0 pasażerów</span>
+      <button type="button" class="btn-sm btn-green" onclick="exportCSV()">⬇️ CSV</button>
+      <button type="button" class="btn-sm btn-red"   onclick="clearAll()">🗑️</button>
+    </div>
+
+    <div class="table-wrap" id="table-wrap">
+      <div class="empty">
+        <div class="icon">📭</div>
+        <p>Brak pasażerów.<br>Formularz wypełni tę listę automatycznie.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- PIN MODAL -->
+<div id="pin-modal">
+  <div class="pin-box">
+    <div class="ico">🔐</div>
+    <h2>Panel administratora</h2>
+    <p>Wprowadź kod PIN</p>
+    <input id="pin-input" type="password" inputmode="numeric"
+      maxlength="8" placeholder="••••"
+      onkeydown="if(event.key==='Enter')checkPin()">
+    <div id="pin-err">❌ Nieprawidłowy PIN</div>
+    <div class="pin-btns">
+      <button type="button" class="pin-cancel" onclick="closePinModal()">Anuluj</button>
+      <button type="button" class="pin-ok"     onclick="checkPin()">Wejdź →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'skoki_pasazerowie';
+const URL_KEY     = 'skoki_sheets_url';
+const TAB_KEY     = 'skoki_sheet_tab';
+const SESSION_KEY = 'skoki_admin_ok';
+const ADMIN_PIN   = '1234'; // ← zmień na swój PIN
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+function save(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
+
+// NAV
+function switchView(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'admin') { loadScriptUrl(); renderTable(); }
+}
+
+// PIN
+function adminLogin(btn) {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') { switchView('admin', btn); return; }
+  window._adminBtn = btn;
+  document.getElementById('pin-modal').classList.add('open');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-err').style.display = 'none';
+  setTimeout(() => document.getElementById('pin-input').focus(), 150);
+}
+function closePinModal() {
+  document.getElementById('pin-modal').classList.remove('open');
+}
+function checkPin() {
+  if (document.getElementById('pin-input').value === ADMIN_PIN) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    closePinModal();
+    switchView('admin', window._adminBtn);
+  } else {
+    document.getElementById('pin-err').style.display = 'block';
+    document.getElementById('pin-input').value = '';
+    document.getElementById('pin-input').focus();
+  }
+}
+
+// FORM VALIDATION
+function validate() {
+  let ok = true;
+  [
+    ['fname', v => v.trim().length >= 2,              'err-fname'],
+    ['lname', v => v.trim().length >= 2,              'err-lname'],
+    ['email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'err-email'],
+    ['phone', v => v.replace(/\D/g,'').length >= 9,   'err-phone'],
+  ].forEach(([id, check, err]) => {
+    const inp = document.getElementById(id);
+    const msg = document.getElementById(err);
+    const pass = check(inp.value);
+    inp.classList.toggle('err-field', !pass);
+    msg.classList.toggle('show', !pass);
+    if (!pass) ok = false;
+  });
+  return ok;
+}
+['fname','lname','email','phone'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () =>
+    document.getElementById(id).classList.remove('err-field'));
+});
+
+function submitForm() {
+  if (!validate()) return;
+  const rec = {
+    id:    'P' + String(Date.now()).slice(-6),
+    ts:    new Date().toLocaleDateString('pl-PL'),
+    fname: document.getElementById('fname').value.trim(),
+    lname: document.getElementById('lname').value.trim(),
+    email: document.getElementById('email').value.trim().toLowerCase(),
+    phone: document.getElementById('phone').value.trim(),
+  };
+  const d = load(); d.push(rec); save(d);
+  document.getElementById('form-card').style.display    = 'none';
+  document.getElementById('success-card').style.display = 'block';
+}
+
+function resetForm() {
+  ['fname','lname','email','phone'].forEach(id => {
+    document.getElementById(id).value = '';
+    document.getElementById(id).classList.remove('err-field');
+  });
+  document.querySelectorAll('.err-msg').forEach(e => e.classList.remove('show'));
+  document.getElementById('form-card').style.display    = 'block';
+  document.getElementById('success-card').style.display = 'none';
+}
+
+// TABLE
+function renderTable() {
+  const data = load();
+  const q    = (document.getElementById('search').value || '').toLowerCase();
+  const rows = data.filter(r =>
+    (r.fname+' '+r.lname+' '+r.email+' '+r.phone).toLowerCase().includes(q));
+  const n = data.length;
+  document.getElementById('count-badge').textContent = n + ' pasażer' + (n===1?'':n<5?'ów':'ów');
+  const wrap = document.getElementById('table-wrap');
+  if (!rows.length) {
+    wrap.innerHTML = `<div class="empty"><div class="icon">📭</div>
+      <p>${n ? 'Brak wyników.' : 'Brak pasażerów.<br>Formularz wypełni tę listę automatycznie.'}</p></div>`;
+    return;
+  }
+  wrap.innerHTML = `<table><thead><tr>
+    <th>#</th><th>Imię</th><th>Nazwisko</th><th>E-mail</th><th>Telefon</th><th></th>
+  </tr></thead><tbody>
+  ${rows.map((r,i) => `<tr>
+    <td style="color:var(--muted);font-size:12px">${i+1}</td>
+    <td><strong>${esc(r.fname)}</strong></td>
+    <td>${esc(r.lname)}</td>
+    <td style="font-size:13px">${esc(r.email)}</td>
+    <td>${esc(r.phone)}</td>
+    <td><button type="button" class="btn-sm btn-red" style="height:38px;padding:0 12px"
+      onclick="deleteRow('${r.id}')">✕</button></td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function deleteRow(id) {
+  if (!confirm('Usunąć pasażera?')) return;
+  save(load().filter(r => r.id !== id));
+  renderTable(); toast('Rekord usunięty');
+}
+function clearAll() {
+  if (!confirm('Usunąć WSZYSTKICH pasażerów?')) return;
+  save([]); renderTable(); toast('Baza wyczyszczona');
+}
+
+// CSV
+function exportCSV() {
+  const data = load();
+  if (!data.length) { toast('Brak danych'); return; }
+  const csv = [['ID','Data','Imię','Nazwisko','Email','Telefon'],
+    ...data.map(r=>[r.id,r.ts,r.fname,r.lname,r.email,r.phone])]
+    .map(row => row.map(v => '"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = 'pasazerowie_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click(); toast('CSV pobrany ✓');
+}
+
+// SHEETS SYNC
+function saveScriptUrl() {
+  const url = document.getElementById('sheets-url').value.trim();
+  const tab = document.getElementById('sheet-tab').value.trim();
+  if (url && !url.startsWith('https://script.google.com')) { toast('⚠️ Nieprawidłowy URL'); return; }
+  if (url) localStorage.setItem(URL_KEY, url);
+  if (tab) localStorage.setItem(TAB_KEY, tab);
+  toast('✅ Zapisano');
+}
+function loadScriptUrl() {
+  const u = 'https://script.google.com/macros/s/AKfycbyBrF3LY0D46pre14pWxT4Mx9MovlorQYPsuxa8aG_UtG_uSw8MnRZ1F1a0gth57tbX/exec';
+  const t = localStorage.getItem(TAB_KEY)||'';
+  document.getElementById('sheets-url').value = u;
+  document.getElementById('sheets-url').disabled = true;
+  if (t) document.getElementById('sheet-tab').value  = t;
+}
+async function syncToSheets() {
+  const url = 'https://script.google.com/macros/s/AKfycbyBrF3LY0D46pre14pWxT4Mx9MovlorQYPsuxa8aG_UtG_uSw8MnRZ1F1a0gth57tbX/exec';
+  const tab = document.getElementById('sheet-tab').value.trim()  || localStorage.getItem(TAB_KEY)||'';
+  if (!url.startsWith('https://script.google.com')) { showStatus('error','⚠️ Wklej URL skryptu.'); return; }
+  if (!tab) { showStatus('error','⚠️ Wpisz nazwę zakładki.'); return; }
+  const data = load();
+  if (!data.length) { toast('Brak danych'); return; }
+  const btn = document.getElementById('sync-btn');
+  btn.disabled = true; btn.textContent = '⏳  Wysyłanie...';
+  showStatus('info', `⏳ Łączenie z „${tab}"…`);
+  try {
+    const res  = await fetch(url, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({action:'sync_passengers', records:data, sheetTab:tab})
+    });
+    const json = await res.json();
+    if (json.status === 'ok') {
+      const extra = json.unmatched&&json.unmatched.length ? `\nNie dopasowano: ${json.unmatched.join(', ')}` : '';
+      showStatus('success',`✅ Dopasowano ${json.matched} osób w arkuszu „${tab}".${extra}`);
+      toast('✅ Synchronizacja gotowa!');
+    } else { showStatus('error','❌ '+( json.message||'błąd')); }
+  } catch { showStatus('error','❌ Błąd połączenia. Sprawdź URL.'); }
+  btn.disabled = false; btn.textContent = '☁️  Wyślij do Google Sheets';
+}
+function showStatus(type, msg) {
+  const el = document.getElementById('sync-status');
+  el.style.display = 'block'; el.textContent = msg;
+  const c = {success:['#DCFCE7','#15803D','#86EFAC'],error:['#FEE2E2','#DC2626','#FCA5A5'],info:['#EBF2FA','#1A3A5C','#93C5FD']}[type];
+  el.style.background=c[0]; el.style.color=c[1]; el.style.border=`1px solid ${c[2]}`;
+}
+
+// TOAST
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
