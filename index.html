@@ -541,14 +541,14 @@ function saveScriptUrl() {
   toast('✅ Zapisano');
 }
 function loadScriptUrl() {
-  const u = 'https://script.google.com/macros/s/AKfycbzthX66TRXnxdx4faFCHWuwKv-HBZ1Cgogd8DDvdPRHyO4f3H8RSrcOlY0_voMbpF0Q/exec';
+  const u = 'https://script.google.com/macros/s/AKfycbz8R_Emhdigt61guPPBhUKgWd16vh3hUbf_YfJaoJQ/dev';
   const t = localStorage.getItem(TAB_KEY)||'';
   document.getElementById('sheets-url').value = u;
   document.getElementById('sheets-url').disabled = true;
   if (t) document.getElementById('sheet-tab').value  = t;
 }
 async function syncToSheets() {
-  const url = 'https://script.google.com/macros/s/AKfycbzthX66TRXnxdx4faFCHWuwKv-HBZ1Cgogd8DDvdPRHyO4f3H8RSrcOlY0_voMbpF0Q/exec';
+  const url = 'https://script.google.com/macros/s/AKfycbz8R_Emhdigt61guPPBhUKgWd16vh3hUbf_YfJaoJQ/dev';
   const tab = document.getElementById('sheet-tab').value.trim()  || localStorage.getItem(TAB_KEY)||'';
   if (!url.startsWith('https://script.google.com')) { showStatus('error','⚠️ Wklej URL skryptu.'); return; }
   if (!tab) { showStatus('error','⚠️ Wpisz nazwę zakładki.'); return; }
