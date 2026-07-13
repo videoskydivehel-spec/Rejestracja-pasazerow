@@ -6,6 +6,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rejestracja Skoki">
+<meta name="theme-color" content="#0B3D8C">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230B3D8C' width='180' height='180'/><text x='50%' y='50%' font-size='100' dominant-baseline='middle' text-anchor='middle'>🪂</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230B3D8C' width='180' height='180'/><text x='50%' y='50%' font-size='100' dominant-baseline='middle' text-anchor='middle'>🪂</text></svg>">
 <title>Rejestracja – Skok Tandemowy</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -258,6 +262,7 @@
     <div class="plane">🪂</div>
     <h1>Rejestracja pasażera</h1>
     <p>Wypełnij formularz przed skokiem</p>
+    <p style="font-size:14px;opacity:0.75;margin-top:8px">📧 Na podany adres e-mail zostanie wysłany link z filmem z Twojego skoku</p>
   </div>
 
   <div class="card" id="form-card">
@@ -536,13 +541,14 @@ function saveScriptUrl() {
   toast('✅ Zapisano');
 }
 function loadScriptUrl() {
-  const u = localStorage.getItem(URL_KEY)||'';
+  const u = 'https://script.google.com/macros/s/AKfycbzthX66TRXnxdx4faFCHWuwKv-HBZ1Cgogd8DDvdPRHyO4f3H8RSrcOlY0_voMbpF0Q/exec';
   const t = localStorage.getItem(TAB_KEY)||'';
-  if (u) document.getElementById('sheets-url').value = u;
+  document.getElementById('sheets-url').value = u;
+  document.getElementById('sheets-url').disabled = true;
   if (t) document.getElementById('sheet-tab').value  = t;
 }
 async function syncToSheets() {
-  const url = document.getElementById('sheets-url').value.trim() || localStorage.getItem(URL_KEY)||'';
+  const url = 'https://script.google.com/macros/s/AKfycbzthX66TRXnxdx4faFCHWuwKv-HBZ1Cgogd8DDvdPRHyO4f3H8RSrcOlY0_voMbpF0Q/exec';
   const tab = document.getElementById('sheet-tab').value.trim()  || localStorage.getItem(TAB_KEY)||'';
   if (!url.startsWith('https://script.google.com')) { showStatus('error','⚠️ Wklej URL skryptu.'); return; }
   if (!tab) { showStatus('error','⚠️ Wpisz nazwę zakładki.'); return; }
